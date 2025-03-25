@@ -11,7 +11,9 @@ const VIDEOS = [vid1,vid2,vid3,vid4]
 function Slider({videos}) {
 	//Idk if this should be a const...?
 	const [slideIndex, setSlideIndex] = useState(0)
+	const slideSwapTime = 5000;
 
+	//So what we actually need here is three slides constantly rendered that fade in or fade out on z index change or transparency change or something of the like.
 	function nextSlide() {
 		if(slideIndex == (videos.length-1)) {
 			setSlideIndex(0);
@@ -19,7 +21,9 @@ function Slider({videos}) {
 			setSlideIndex(slideIndex+1);
 		}
 		console.log(slideIndex);
-	}	
+		setTimeout(nextSlide,slideSwapTime);
+	}
+	setTimeout(nextSlide, slideSwapTime);
 	return (
 		<>
 			<div className='slider'>
