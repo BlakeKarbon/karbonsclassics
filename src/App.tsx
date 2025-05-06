@@ -1,61 +1,39 @@
-import { useState } from 'react'
+import { useState, useLayoutEffect, forwardRef  } from 'react'
 import './App.css'
+import HTMLFlipBook from 'react-pageflip'
 
-import vid1 from './assets/vid1.mp4'
-import vid2 from './assets/vid2.mp4'
-import vid3 from './assets/vid3.mp4'
-import vid4 from './assets/vid4.mp4'
+const cutoffYear = 1990;
 
-const VIDEOS = [vid1,vid2,vid3,vid4]
-
-function Slider({videos}) {
-	//Idk if this should be a const...?
-	const [slideIndex, setSlideIndex] = useState(0)
-	const slideSwapTime = 5000;
-
-	//So what we actually need here is three slides constantly rendered that fade in or fade out on z index change or transparency change or something of the like.
-	function nextSlide() {
-		if(slideIndex == (videos.length-1)) {
-			setSlideIndex(0);
-		} else {
-			setSlideIndex(slideIndex+1);
-		}
-		console.log(slideIndex);
-		setTimeout(nextSlide,slideSwapTime);
-	}
-	setTimeout(nextSlide, slideSwapTime);
+const Page = forwardRef((props, ref) => {
 	return (
-		<>
-			<div className='slider'>
-				<video className='slide' key={slideIndex} autoPlay loop muted disablepictureinpicture onClick={nextSlide}>
-					<source src={videos[slideIndex]} type='video/mp4' />
-				</video>
-			</div>
-		</>
-	)
-}
-/* NOTES:
- * We possibly want the site to only show vertical videos on a vertical device and then horizontal on a horizontal device and perhaps switch between them and crop etc...
- */
+		<div className="demoPage" ref={ref}>
+			<h1>Page Header</h1>
+			<p>{props.children}</p>
+			<p>Page number: {props.number}</p>
+		</div>
+	);
+});
 
-function Menubar() {
-	const [content, setContent] = useState("Menu Bar");
-	function testChange() {
-		setContent("Clicked Menu Bar");
-	}
-	return (
-			<div className='menubar' onClick={testChange}>{content}</div>
-	)
-}
+
 function App() {
+	const [usePortrait, setUsePortrait] = useState(window.innerWidth < window.innerHeight);
 	return (
-		<>
-			
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-			<Menubar />
-			<Slider videos={VIDEOS} />
-		</>
-	)
+		<HTMLFlipBook
+		width={window.innerHeight*.9*.6}
+		height={window.innerHeight*.9}
+		showCover={true}
+		usePortrait={usePortrait}
+		startZIndex={0}
+		drawShadow={true}>
+			<Page number="1">Page text</Page>
+			<Page number="2">Page text</Page>
+			<Page number="3">Page text</Page>
+			<Page number="4">Page text</Page>
+			<Page number="5">Page text</Page>
+			<Page number="6">Page text</Page>
+			<Page number="7">Page text</Page>
+		</HTMLFlipBook>
+	);
 }
 
 export default App
