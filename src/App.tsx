@@ -1,6 +1,7 @@
 import { useState, useLayoutEffect, useEffect, useRef, forwardRef  } from 'react'
 import './App.css'
 import HTMLFlipBook from 'react-pageflip'
+import testImage from './assets/test.png'
 
 const cutoffYear = 1990;
 
@@ -23,9 +24,14 @@ const IndexPage = forwardRef((props, ref) => {
 
 const CoverPage = forwardRef((props, ref) => {
 	return (
+		<>
 		<div className="cover-page" ref={ref}>
-			<div>{props.children}</div>
+		<div className="cover-page-filter"></div>
+			<div>
+				{props.children}
+			</div>
 		</div>
+		</>
 	);
 });
 
@@ -34,7 +40,7 @@ function App() {
 	const [bookSize, setBookSize] = useState(function() { 
 		const newState = window.innerWidth < window.innerHeight;
 		if (newState) {
-			return window.innerWidth*1.66*.9;
+			return window.innerWidth*1.66*.9; //This is screwed up somehow
 		} else {
 			return window.innerHeight*.9;
 		}	
@@ -75,7 +81,10 @@ function App() {
 		usePortrait={usePortrait}
 		startZIndex={0}
 		drawShadow={true}>
-			<CoverPage>Title</CoverPage>
+			<CoverPage>
+				<h1>Karbon's Classic Equipment and Auto</h1>
+				<img src={testImage} width='100%' height='100%' max-width='100%' max-height='100%' object-fit='contain'/>
+			</CoverPage>
 			<IndexPage></IndexPage>
 			<Page number="1">
 				<h1>Title</h1>

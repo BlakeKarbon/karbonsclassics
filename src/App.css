@@ -6,10 +6,25 @@
 
 h1 {
 	text-align: center;
+	font-family: "Courier New", Courier, monospace;
 }
 
 .cover-page {
-	background: linear-gradient(to bottom, #3d2b1f, #5a3d2f), radial-gradient(circle at 20% 30%, rgba(92, 64, 51, 0.1) 0%, transparent 40%), radial-gradient(circle at 70% 20%, rgba(139, 69, 19, 0.08) 0%, transparent 35%), radial-gradient(circle at 40% 60%, rgba(92, 64, 51, 0.12) 0%, transparent 45%), radial-gradient(circle at 60% 80%, rgba(165, 42, 42, 0.1) 0%, transparent 40%);
+	#background: linear-gradient(to bottom, #3d2b1f, #5a3d2f), radial-gradient(circle at 20% 30%, rgba(92, 64, 51, 0.1) 0%, transparent 40%), radial-gradient(circle at 70% 20%, rgba(139, 69, 19, 0.08) 0%, transparent 35%), radial-gradient(circle at 40% 60%, rgba(92, 64, 51, 0.12) 0%, transparent 45%), radial-gradient(circle at 60% 80%, rgba(165, 42, 42, 0.1) 0%, transparent 40%);
+	background: #303030;
+	color: #ffffff;
+	overflow: hidden;
+}
+
+.cover-page-filter {
+	position: absolute;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	background-color: rgba(255,0,0,0.5);
+	mix-blend-mode: screen;
+	pointer-events: none;
 }
 
 .page {
