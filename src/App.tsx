@@ -1,7 +1,17 @@
 import { useState, useLayoutEffect, useEffect, useRef, forwardRef  } from 'react'
 import './App.css'
 import HTMLFlipBook from 'react-pageflip'
-import coverImg from './assets/cover.png'
+
+// Assets:
+import coverImg from './assets/imgs/cover.png'
+import fp1 from './assets/textures/stains/fingerprint-1.png'
+import fp2 from './assets/textures/stains/fingerprint-2.png'
+import fp3 from './assets/textures/stains/fingerprint-3.png'
+import fps1 from './assets/textures/stains/fingerprint-smudge-1.png'
+import fps2 from './assets/textures/stains/fingerprint-smudge-2.png'
+import fps3 from './assets/textures/stains/fingerprint-smudge-3.png'
+import fps4 from './assets/textures/stains/fingerprint-smudge-4.png'
+import oil1 from './assets/textures/stains/oil-1.png'
 
 const cutoffYear = 1990;
 
@@ -26,9 +36,11 @@ const IndexPage = forwardRef((props, ref) => {
 const CoverPage = forwardRef((props, ref) => {
 	return (
 		<>
-		<div className="cover-page" ref={ref}>
+		<div className="cover-page" ref={ref}>	
 			<div className="cover-page-filter"></div>
-			<img src={coverImg} width='100%' height='auto' max-width='100%' max-height='100%' object-fit='contain'/>
+			<img className="stain" src={fps1} style={{bottom: '35%', right: 0, opacity: 0.7, width: '15%'}}/>
+			<img className="stain" src={fps2} style={{bottom: '30%', right: -10, opacity: 0.6, width: '18%', transform: 'rotate(-16deg)'}}/>
+			<img src={coverImg} width='100%' style={{top: 0, left: 0,}} height='auto' max-width='100%' max-height='100%' object-fit='contain'/>
 			<p>We fix: <br></br> Pickups, Tractors, Motorcycles, Muscle Cars, Combines, Semi-Trucks, and more.</p>
 		</div>
 		</>

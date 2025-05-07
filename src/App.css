@@ -34,6 +34,7 @@
 	background: #303030;
 	color: #ffffff;
 	overflow: hidden;
+	position: relative;
 }
 .cover-page p {
 	position: absolute;
@@ -47,7 +48,13 @@
 	font-style: italic;
 }
 .cover-page img {
-	position: abolute;
+	position: absolute;
+}
+
+.stain {
+	position: absolute;
+	z-index: 1;
+	pointer-events: none;
 }
 
 .cover-page-filter {
@@ -56,6 +63,7 @@
 	left: 0;
 	right: 0;
 	bottom: 0;
+	z-index: 1;
 	background-color: rgba(255,0,0,0.5);
 	#background-color: rgba(0,20,150,0.5);
 	#background-color: rgba(252,114,5,0.5);
@@ -81,6 +89,12 @@
 	color: #3e3a2c;
 	font-family: "Courier New", Courier, monospace;
 	position: relative;
+}
+
+.page img {
+	position: absolute;
+	top: 0;
+	left: 0;
 }
 
 .page-content {
