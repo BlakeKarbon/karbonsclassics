@@ -4,9 +4,29 @@
 	text-align: center;
 }
 
-h1 {
-	text-align: center;
-	font-family: "Courier New", Courier, monospace;
+@font-face {
+	font-family: 'liberation-sans';
+	src: url('./assets/fonts/liberation-sans/LiberationSans-Regular.ttf') format('truetype');
+	font-weight: normal;
+	font-style: normal;
+}
+@font-face {
+	font-family: 'liberation-sans';
+	src: url('./assets/fonts/liberation-sans/LiberationSans-Italic.ttf') format('truetype');
+	font-weight: normal;
+	font-style: italic;
+}
+@font-face {
+	font-family: 'liberation-sans';
+	src: url('./assets/fonts/liberation-sans/LiberationSans-BoldItalic.ttf') format('truetype');
+	font-weight: bold;
+	font-style: italic;
+}
+@font-face {
+	font-family: 'liberation-sans';
+	src: url('./assets/fonts/liberation-sans/LiberationSans-Bold.ttf') format('truetype');
+	font-weight: bold;
+	font-style: normal;
 }
 
 .cover-page {
@@ -14,6 +34,20 @@ h1 {
 	background: #303030;
 	color: #ffffff;
 	overflow: hidden;
+}
+.cover-page p {
+	position: absolute;
+	bottom: 1rem;
+	left: 1rem;
+	font-family: "liberation-sans", monospace;
+	#font-family: "CustomFont";
+	font-size: 100%;
+	text-align: center;
+	font-weight: bold;
+	font-style: italic;
+}
+.cover-page img {
+	position: abolute;
 }
 
 .cover-page-filter {
@@ -23,6 +57,8 @@ h1 {
 	right: 0;
 	bottom: 0;
 	background-color: rgba(255,0,0,0.5);
+	#background-color: rgba(0,20,150,0.5);
+	#background-color: rgba(252,114,5,0.5);
 	mix-blend-mode: screen;
 	pointer-events: none;
 }
