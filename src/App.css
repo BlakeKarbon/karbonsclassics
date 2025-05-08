@@ -57,6 +57,29 @@ html {
 	font-style: italic;
 }
 
+.cover-page {
+	#background: linear-gradient(to bottom, #3d2b1f, #5a3d2f), radial-gradient(circle at 20% 30%, rgba(92, 64, 51, 0.1) 0%, transparent 40%), radial-gradient(circle at 70% 20%, rgba(139, 69, 19, 0.08) 0%, transparent 35%), radial-gradient(circle at 40% 60%, rgba(92, 64, 51, 0.12) 0%, transparent 45%), radial-gradient(circle at 60% 80%, rgba(165, 42, 42, 0.1) 0%, transparent 40%);
+	background: #303030;
+	color: #ffffff;
+	overflow: hidden;
+	position: relative;
+}
+
+.title-page-cont {
+	position: absolute;
+	bottom: 3rem;
+	left: 1rem;
+	font-family: "liberation-sans", monospace;
+	#font-family: "CustomFont";
+	font-size: 100%;
+	text-align: center;
+	font-weight: bold;
+	font-style: italic;
+
+}
+.cover-page img {
+	position: absolute;
+}
 .popup {
 	top: 25%;
 	right: 10%;
@@ -73,27 +96,11 @@ html {
 	transition: opacity 1s ease;
 	opacity: 0;
 }
-
-.cover-page {
-	#background: linear-gradient(to bottom, #3d2b1f, #5a3d2f), radial-gradient(circle at 20% 30%, rgba(92, 64, 51, 0.1) 0%, transparent 40%), radial-gradient(circle at 70% 20%, rgba(139, 69, 19, 0.08) 0%, transparent 35%), radial-gradient(circle at 40% 60%, rgba(92, 64, 51, 0.12) 0%, transparent 45%), radial-gradient(circle at 60% 80%, rgba(165, 42, 42, 0.1) 0%, transparent 40%);
-	background: #303030;
-	color: #ffffff;
-	overflow: hidden;
-	position: relative;
-}
-.title-text {
-	position: absolute;
-	bottom: 3rem;
-	left: 1rem;
-	font-family: "liberation-sans", monospace;
-	#font-family: "CustomFont";
+.popup-text {
+	font-family: "comfortaa";
 	font-size: 100%;
 	text-align: center;
 	font-weight: bold;
-	font-style: italic;
-}
-.cover-page img {
-	position: absolute;
 }
 
 .stain {
