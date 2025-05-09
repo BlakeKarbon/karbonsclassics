@@ -1,30 +1,14 @@
-import { useState, useLayoutEffect, useEffect, useRef, forwardRef  } from 'react'
+import { useState, useLayoutEffect, useEffect, useRef, forwardRef, lazy  } from 'react'
 import './App.css'
 import HTMLFlipBook from 'react-pageflip'
 
 // Assets:
-import coverImg from './assets/imgs/cover.png'
-import pencilImg from './assets/imgs/pencil.png'
-import fp1 from './assets/textures/stains/fingerprint-1.png'
-import fp2 from './assets/textures/stains/fingerprint-2.png'
-import fp3 from './assets/textures/stains/fingerprint-3.png'
-import fps1 from './assets/textures/stains/fingerprint-smudge-1.png'
-import fps2 from './assets/textures/stains/fingerprint-smudge-2.png'
-import fps3 from './assets/textures/stains/fingerprint-smudge-3.png'
-import fps4 from './assets/textures/stains/fingerprint-smudge-4.png'
-import oil1 from './assets/textures/stains/oil-1.png'
+import imgCover from './assets/imgs/cover.png'
+import imgBack from './assets/imgs/back.png'
+import imgPencil from './assets/imgs/pencil.png'
 import tap from './assets/icons/tap-1-svgrepo-com.svg'
 import swipe from './assets/icons/swipe-left-svgrepo-com.svg'
 
-import testVid from './assets/vids/test.webm'
-import isuzu from './assets/imgs/isuzu-hand-crank.png'
-
-import imgStudebaker from './assets/imgs/Studebaker.png'
-import imgStudebaker471p1 from './assets/imgs/Studebaker-4_71-1.png'
-import imgStudebaker471p2 from './assets/imgs/Studebaker-4_71-2.png'
-import imgStudebaker471p3 from './assets/imgs/Studebaker-4_71-3.png'
-import imgStudebaker471p4 from './assets/imgs/Studebaker-4_71-4.png'
-import imgWoods from './assets/imgs/woods-b120pickup.png'
 
 
 const cutoffYear = 1990;
@@ -63,7 +47,7 @@ const TitleStains = forwardRef((props, ref) => {
 const TitlePage = forwardRef((props, ref) => {
 	return (
 		<>
-			<img src={coverImg} width='100%' style={{top: 0, left: 0,}} height='auto' max-width='100%' max-height='100%' object-fit='contain'/>
+			<img src={imgCover} width='100%' style={{top: 0, left: 0,}} height='auto' max-width='100%' max-height='100%' object-fit='contain'/>
 			<div className="title-page-cont">
 				<div style={{width: '90%'}}>
 					We fix, maintain, and modify:
@@ -171,7 +155,7 @@ function App() {
 	}, []);
 	return (
 		<>
-		<img src={pencilImg} pointerEvents='none' style={{ position: 'absolute', top: '-15%', right: '30%', height: '40%', transform: 'rotate(95deg)'}}/>
+		<img src={imgPencil} pointerEvents='none' style={{ position: 'absolute', top: '-15%', right: '30%', height: '40%', transform: 'rotate(95deg)'}}/>
 		<HTMLFlipBook
 		ref={flipBookRef}
 		width={bookSize*.6}
@@ -218,21 +202,19 @@ function App() {
 			<Page number="2">
 				<h1>Gallery:</h1>
 				<div>Project Title</div>
-				<img src={isuzu} width='100%' style={{top: 0, left: 0,}} height='auto' object-fit='contain'/>
+				<img src={imgBack} width='100%' style={{top: 0, left: 0,}} height='auto' object-fit='contain'/>
 			</Page>
 			<Page number="3">
 				<div>Project Title</div>
-				<video style={{maxWidth: '60%', maxHeight: '60%'}} autoPlay loop muted>
-					<source src={testVid} type="video/webm"/>
-					Error Loading Video...
-				</video>
 			</Page>
 			<Page number="4">Page text</Page>
 			<Page number="5">Page text</Page>
 			<Page number="6">Page text</Page>
 			<Page number="7">Page text</Page>
 			<Page number="8">Links:</Page>
-			<CoverPage></CoverPage>
+			<CoverPage>
+				<img src={imgBack} width='100%' style={{bottom: 0, left: 0,}} height='auto' max-width='100%' max-height='100%' object-fit='contain'/>
+			</CoverPage>
 		</HTMLFlipBook>
 		</>
 	);
