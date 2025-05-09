@@ -4,7 +4,6 @@ import HTMLFlipBook from 'react-pageflip'
 
 // Assets:
 import coverImg from './assets/imgs/cover.png'
-import isuzu from './assets/imgs/isuzu-hand-crank.png'
 import pencilImg from './assets/imgs/pencil.png'
 import fp1 from './assets/textures/stains/fingerprint-1.png'
 import fp2 from './assets/textures/stains/fingerprint-2.png'
@@ -16,7 +15,17 @@ import fps4 from './assets/textures/stains/fingerprint-smudge-4.png'
 import oil1 from './assets/textures/stains/oil-1.png'
 import tap from './assets/icons/tap-1-svgrepo-com.svg'
 import swipe from './assets/icons/swipe-left-svgrepo-com.svg'
+
 import testVid from './assets/vids/test.webm'
+import isuzu from './assets/imgs/isuzu-hand-crank.png'
+
+import imgStudebaker from './assets/imgs/Studebaker.png'
+import imgStudebaker471p1 from './assets/imgs/Studebaker-4_71-1.png'
+import imgStudebaker471p2 from './assets/imgs/Studebaker-4_71-2.png'
+import imgStudebaker471p3 from './assets/imgs/Studebaker-4_71-3.png'
+import imgStudebaker471p4 from './assets/imgs/Studebaker-4_71-4.png'
+import imgWoods from './assets/imgs/woods-b120pickup.png'
+
 
 const cutoffYear = 1990;
 
@@ -196,7 +205,8 @@ function App() {
 				<h1>Index:</h1>
 				<IndexEntry entryTitle='Cover' entryPages='0' entryFlip='0'></IndexEntry>
 				<IndexEntry entryTitle='Index' entryPages='1' entryFlip='1'></IndexEntry>
-				<IndexEntry entryTitle='Gallery' entryPages='2-8' entryFlip='2'></IndexEntry>
+				<IndexEntry entryTitle='Gallery' entryPages='2-7' entryFlip='2'></IndexEntry>
+				<IndexEntry entryTitle='Social Media Links' entryPages='8' entryFlip='8'></IndexEntry>
 				<div style={{textAlign: 'center', fontStyle: 'italic', fontSize: '80%', position: 'absolute', bottom: '5%', left: '0%', padding: '5%'}}>
 					"Can a few people, earning less than $2 USD per day, without parts or roads, use it continuously for over 40 years?"
 					<br></br>
@@ -219,6 +229,9 @@ function App() {
 			</Page>
 			<Page number="4">Page text</Page>
 			<Page number="5">Page text</Page>
+			<Page number="6">Page text</Page>
+			<Page number="7">Page text</Page>
+			<Page number="8">Links:</Page>
 			<CoverPage></CoverPage>
 		</HTMLFlipBook>
 		</>
