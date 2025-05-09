@@ -23,7 +23,9 @@ const cutoffYear = 1990;
 const Page = forwardRef((props, ref) => {
 	return (
 		<div className="page" ref={ref}>
-			<div className="page-content">{props.children}</div>
+			<div className="page-container">
+				<div className="page-content">{props.children}</div>
+			</div>
 			<div className="page-footer">{props.number}</div>
 		</div>
 	);
@@ -32,25 +34,9 @@ const Page = forwardRef((props, ref) => {
 const IndexPage = forwardRef((props, ref) => {
 	return (
 		<div className="page" ref={ref}>
-			<div style={{textAlign: 'center'}}>
-			Contact:
-			<br></br>
-			karbonsclassics@gmail.com
-			<br></br>
-			(720)-404-0695
-			<br></br>
-			<br></br>
-			Index:
+			<div style={{padding: '5%'}}>	
+				{props.children}
 			</div>
-			<br></br>
-			<div style={{textAlign: 'center', fontStyle: 'italic', fontSize: '80%'}}>
-				"Can a few people, earning less than $2 USD per day, without parts or roads, use it continuously for over 40 years?"
-				<br></br>
-				- Blake, in response to 
-				<br></br>
-				"What qualifies as a truck?"
-			</div>
-			{props.children}
 		</div>
 	);
 });
@@ -70,8 +56,18 @@ const TitlePage = forwardRef((props, ref) => {
 		<>
 			<img src={coverImg} width='100%' style={{top: 0, left: 0,}} height='auto' max-width='100%' max-height='100%' object-fit='contain'/>
 			<div className="title-page-cont">
-				<div>Classic Mobile Mechanic:</div>
-				<div>Probably Move Contact Info Here In the corner or soemthing.</div>
+				<div style={{width: '90%'}}>
+					We fix, maintain, and modify:
+					<br></br>
+					<div style={{fontSize: '85%', fontWeight: 'normal'}}>
+						Pickups, Tractors, Motorcycles, Muscle Cars, Combines, Semi-Trucks, and more.
+					</div>
+				</div>
+				<div className="title-contact">
+				(720)-404-0695
+				<br></br>
+				karbonsclassics@gmail.com
+				</div>
 			</div>
 
 		</>
@@ -88,6 +84,8 @@ const CoverPage = forwardRef((props, ref) => {
 		</>
 	);
 });
+
+
 
 function App() {
 	function getBookSize() {
@@ -106,6 +104,35 @@ function App() {
 	const [bookSize, setBookSize] = useState(newSize);
 	const [fontBaseSize, setFontBaseSize] = useState(newSize/30);
 	const flipBookRef = useRef(null);
+
+	function IndexEntry({ entryTitle, entryPages, entryFlip}) {
+		return (
+			<div style={{
+				width: '100%',
+				alignItems: 'center',
+				display: 'flex',
+			}}>
+				<span style={{
+					marginRight: '1%',
+				}}>
+				<a onClick={() => {
+					flipBookRef.current.pageFlip().flip(parseInt(entryFlip));
+				}}>{entryTitle}</a>
+				</span>
+				<span style={{
+					flexGrow: 1,
+					borderBottom: '.2rem dotted black',
+					margin: '0 1%',
+				}}></span>
+				<span style={{
+					marginLeft: '1%',
+				}}>
+				{entryPages}
+				</span>
+			</div>
+		);
+	}
+
 	useEffect(() => {
 		const handleResize = () => {
 			const [newState, newSize] = getBookSize();
@@ -113,7 +140,6 @@ function App() {
 			setUsePortrait(newState);
 			//flipBookRef.current.update();
 			//flipBookRef.current.pageFlip().updateOrientation(usePortrait);
-			console.log('resize');
 			if (flipBookRef.current) {
 				flipBookRef.current.pageFlip().update();
 			}
@@ -145,25 +171,38 @@ function App() {
 		usePortrait={usePortrait}
 		startZIndex={0}
 		drawShadow={true}
-		onFlip={() => { document.getElementById('popupDiv').style.opacity = 0;}}
+		onFlip={() => { 
+			document.getElementById('popupDiv').style.opacity = 0;
+			//console.log(flipBookRef.current.pageFlip());
+		}}
 		style={{fontSize: fontBaseSize}}>
 			<CoverPage>
 				<div id='popupDiv' className='popup' style={{position: 'absolute', zIndex: 2,}}>
-					<div className='popup-text' style={{ position: 'relative', width: '80%', padding: '1rem'}}>
-						Welcome to Karbon's Classic Equipment and Auto! To continue, please swipe left or click the right side of the page!
+					<div className='popup-text' style={{ position: 'relative', width: '70%', padding: '1rem'}}>
+						Welcome to Karbon's Classic Equipment and Auto! Swipe or tap the sides to flip pages!
 					</div>
 					<img src={swipe} style={{position: 'absolute', top: '50%', right: 0, width: '16%', height: 'auto', transform: 'rotate(55deg)'}}/>
 					<img src={tap} style={{position: 'absolute', top: '25%', right: 0, width: '20%', height: 'auto', transform: 'rotate(120deg)'}}/>
 				</div>
 			<TitlePage></TitlePage>
 			</CoverPage>
-			<IndexPage>	
-			</IndexPage>
 			<Page number="1">
 				<h1>About:</h1>
-				<p>About text here and some pics</p>
-				<div>
-					We fix, maintain, and modify: <br></br> Pickups, Tractors, Motorcycles, Muscle Cars, Combines, Semi-Trucks, and more.		
+				<p style={{textIndent: '10%'}}>
+				Karbon's Classic Equipment and Auto provides mobile mechanic services specializing in vehicles and equipment manufactured before {cutoffYear}.
+				We have extensive experience working with all kinds of vehicles and machinery including one-of-one and very rare models.
+				Our passion is to keep your old equipment in use, whether that be taking friends on rides to a car show, hauling goods, or pulling a plow.
+				</p>
+				<h1>Index:</h1>
+				<IndexEntry entryTitle='Cover' entryPages='0' entryFlip='0'></IndexEntry>
+				<IndexEntry entryTitle='Index' entryPages='1' entryFlip='1'></IndexEntry>
+				<IndexEntry entryTitle='Gallery' entryPages='2-8' entryFlip='2'></IndexEntry>
+				<div style={{textAlign: 'center', fontStyle: 'italic', fontSize: '80%', position: 'absolute', bottom: '5%', left: '0%', padding: '5%'}}>
+					"Can a few people, earning less than $2 USD per day, without parts or roads, use it continuously for over 40 years?"
+					<br></br>
+					- Blake, in response to 
+					<br></br>
+					"What qualifies as a truck?"
 				</div>
 			</Page>
 			<Page number="2">
@@ -180,7 +219,7 @@ function App() {
 			</Page>
 			<Page number="4">Page text</Page>
 			<Page number="5">Page text</Page>
-			<CoverPage>End</CoverPage>
+			<CoverPage></CoverPage>
 		</HTMLFlipBook>
 		</>
 	);

@@ -67,21 +67,28 @@ html {
 
 .title-page-cont {
 	position: absolute;
-	bottom: 3rem;
-	left: 1rem;
+	bottom: 4%;
+	left: 0;
 	font-family: "liberation-sans", monospace;
 	#font-family: "CustomFont";
 	font-size: 100%;
-	text-align: center;
+	text-align: left;
 	font-weight: bold;
 	font-style: italic;
+	padding: 2%;
 
+}
+.title-contact {
+	font-size: 75%;
+	font-weight: normal;
+	font-style: normal;
+	text-align: right;
 }
 .cover-page img {
 	position: absolute;
 }
 .popup {
-	top: 25%;
+	top: 30%;
 	right: 10%;
 	width: 80%;
 	color: white;
@@ -143,14 +150,14 @@ html {
 	line-height: 100%;
 	position: relative;
 }
-.page div {
+.page-container {
 	padding: 5%;
 }
 .page h1 {
 	font-size: 200%;
 	font-family: "liberation-sans";
 	text-align: center;
-	line-height: 100%;
+	line-height: 40%;
 	position: relative;
 
 }
