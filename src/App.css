@@ -149,6 +149,7 @@ html {
 	text-align: left;
 	line-height: 100%;
 	position: relative;
+	overflow: hidden;
 }
 .page-container {
 	padding: 5%;
