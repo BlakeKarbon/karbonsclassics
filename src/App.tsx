@@ -1,4 +1,5 @@
-import { useState, useLayoutEffect, useEffect, useRef, forwardRef, lazy  } from 'react'
+import { useState, useEffect, useRef, forwardRef, ReactNode } from 'react'
+//import { useState, useLayoutEffect, useEffect, useRef, forwardRef, lazy  } from 'react'
 import './App.css'
 import HTMLFlipBook from 'react-pageflip'
 
@@ -11,7 +12,7 @@ import swipe from './assets/icons/swipe-left-svgrepo-com.svg'
 
 // It looks like these end up loading dynamically...
 // Black and White Image Assets:
-import bwImgB120TowIsu from './assets/imgs/bw/b120-tow-isu.png'
+//import bwImgB120TowIsu from './assets/imgs/bw/b120-tow-isu.png'
 import bwImgB120WaterCrossing from './assets/imgs/bw/b120-water-crossing.png'
 import bwImgB120WithStudebaker from './assets/imgs/bw/b120-with-Studebaker.png'
 import bwImgB120Woods from './assets/imgs/bw/woods-b120pickup.png'
@@ -27,18 +28,18 @@ import bwImgHydromatic3 from './assets/imgs/bw/hydromatic-3.png'
 import bwImgHydromatic4 from './assets/imgs/bw/hydromatic-4.png'
 import bwImgHydromatic5 from './assets/imgs/bw/hydromatic-5.png'
 import bwImgHydromatic6 from './assets/imgs/bw/hydromatic-6.png'
-import bwImgInjectionPumpTiming from './assets/imgs/bw/injection-pump-timing.png'
+//import bwImgInjectionPumpTiming from './assets/imgs/bw/injection-pump-timing.png'
 import bwImgIsuzuH4 from './assets/imgs/bw/isuzu-h4.png'
 import bwImgIsuzuHandCrank from './assets/imgs/bw/isuzu-hand-crank.png'
 import bwImgIsuzuPlow1 from './assets/imgs/bw/isuzu-plow-1.png'
 import bwImgLoadstar1 from './assets/imgs/bw/loadstar-1.png'
 import bwImgLoadstarWorkers2 from './assets/imgs/bw/loadstar-workers-2.png'
-import bwImgLoadstarWorkers from './assets/imgs/bw/loadstar-workers.png'
-import bwImgNapco1 from './assets/imgs/bw/napco-1.png'
+//import bwImgLoadstarWorkers from './assets/imgs/bw/loadstar-workers.png'
+//import bwImgNapco1 from './assets/imgs/bw/napco-1.png'
 import bwImgNapco2 from './assets/imgs/bw/napco-2.png'
 import bwImgNapco3 from './assets/imgs/bw/napco-3.png'
 import bwImgNapco4 from './assets/imgs/bw/napco-4.png'
-import bwImgPdTravelall from './assets/imgs/bw/pd-travelall.png'
+//import bwImgPdTravelall from './assets/imgs/bw/pd-travelall.png'
 import bwImgPlow1 from './assets/imgs/bw/plow-1.png'
 import bwImgPlow2 from './assets/imgs/bw/plow-2.png'
 import bwImgPlow3 from './assets/imgs/bw/plow-3.png'
@@ -47,7 +48,7 @@ import bwImgPlowAndTravelall from './assets/imgs/bw/plow-and-travelall.png'
 import bwImgPtPump1 from './assets/imgs/bw/pt-pump-1.png'
 import bwImgSplitCam from './assets/imgs/bw/split-cam.png'
 import bwImgStudebaker4_711 from './assets/imgs/bw/Studebaker-4_71-1.png'
-import bwImgStudebaker4_712 from './assets/imgs/bw/Studebaker-4_71-2.png'
+//import bwImgStudebaker4_712 from './assets/imgs/bw/Studebaker-4_71-2.png'
 import bwImgStudebaker4_713 from './assets/imgs/bw/Studebaker-4_71-3.png'
 import bwImgStudebaker4_714 from './assets/imgs/bw/Studebaker-4_71-4.png'
 import bwImgStudebaker from './assets/imgs/bw/Studebaker.png'
@@ -57,6 +58,7 @@ import bwImgWillys from './assets/imgs/bw/willys.png'
 import bwImgWillysValves from './assets/imgs/bw/willys-valves.png'
 import bwImgWorkTravelall2 from './assets/imgs/bw/work-travelall-2.png'
 // Color Image Assets:
+/*
 import colorImgB120TowIsu from './assets/imgs/color/b120-tow-isu.png'
 import colorImgB120WaterCrossing from './assets/imgs/color/b120-water-crossing.png'
 import colorImgB120WithStudebaker from './assets/imgs/color/b120-with-Studebaker.png'
@@ -102,29 +104,31 @@ import colorImgWillysOpen from './assets/imgs/color/willys-open.png'
 import colorImgWillys from './assets/imgs/color/willys.png'
 import colorImgWillysValves from './assets/imgs/color/willys-valves.png'
 import colorImgWorkTravelall2 from './assets/imgs/color/work-travelall-2.png'
+*/
 // Black and White Video Assets:
-import bwVidB120Flex from './assets/vids/bw/b120-flex.webm'
+//import bwVidB120Flex from './assets/vids/bw/b120-flex.webm'
 import bwVidBlownPiston from './assets/vids/bw/blown-piston.webm'
 import bwVidClutch from './assets/vids/bw/clutch.webm'
 import bwVidDodgeRearMain from './assets/vids/bw/dodge-rear-main.webm'
 import bwVidDodgeValves1 from './assets/vids/bw/dodge-valves-1.webm'
 import bwVidDodgeValves2 from './assets/vids/bw/dodge-valves-2.webm'
-import bwVidFord9n from './assets/vids/bw/ford9n.webm'
+//import bwVidFord9n from './assets/vids/bw/ford9n.webm'
 import bwVidGrainFordCovers from './assets/vids/bw/grain-ford-covers.webm'
 import bwVidGrainFordRockerRemoval from './assets/vids/bw/grain-ford-rocker-removal.webm'
 import bwVidGrainFordValves1 from './assets/vids/bw/grain-ford-valves-1.webm'
-import bwVidIsuzuCharger1 from './assets/vids/bw/isuzu-charger-1.webm'
-import bwVidIsuzuCharger2 from './assets/vids/bw/isuzu-charger-2.webm'
-import bwVidMassyharris from './assets/vids/bw/massyharris.webm'
-import bwVidPistonAssemble from './assets/vids/bw/piston-assemble.webm'
-import bwVidSmoky from './assets/vids/bw/smoky.webm'
+//import bwVidIsuzuCharger1 from './assets/vids/bw/isuzu-charger-1.webm'
+//import bwVidIsuzuCharger2 from './assets/vids/bw/isuzu-charger-2.webm'
+//import bwVidMassyharris from './assets/vids/bw/massyharris.webm'
+//import bwVidPistonAssemble from './assets/vids/bw/piston-assemble.webm'
+//import bwVidSmoky from './assets/vids/bw/smoky.webm'
 import bwVidTravelallVac from './assets/vids/bw/travelall-vac.webm'
 import bwVidTravelallUnderside from './assets/vids/bw/travelall-underside.webm'
 import bwVidWelding from './assets/vids/bw/welding.webm'
-import bwVidWillys from './assets/vids/bw/willys.webm'
+//import bwVidWillys from './assets/vids/bw/willys.webm'
 import bwVidSullairFountian from './assets/vids/bw/sullair-fountian.webm'
 import bwVidValvetrain from './assets/vids/bw/valvetrain.webm'
 // Color Video Assets:
+/*
 import colorVidB120Flex from './assets/vids/color/b120-flex.mp4'
 import colorVidBlownPiston from './assets/vids/color/blown-piston.mp4'
 import colorVidClutch from './assets/vids/color/clutch.mp4'
@@ -146,10 +150,16 @@ import colorVidWelding from './assets/vids/color/welding.mp4'
 import colorVidWillys from './assets/vids/color/willys.mp4'
 import colorVidSullairFountian from './assets/vids/color/sullair-fountian.webm'
 import colorVidValvetrain from './assets/vids/color/valvetrain.webm'
+*/
 
 const cutoffYear = 1990;
 
-const Page = forwardRef((props, ref) => {
+interface PageProps {
+  children?: ReactNode;
+  number?: string;
+}
+
+const Page = forwardRef<HTMLDivElement, PageProps>((props, ref) => {
 	return (
 		<div className="page" ref={ref}>
 			<div className="page-container">
@@ -160,31 +170,11 @@ const Page = forwardRef((props, ref) => {
 	);
 });
 
-const IndexPage = forwardRef((props, ref) => {
-	return (
-		<div className="page" ref={ref}>
-			<div style={{padding: '5%'}}>	
-				{props.children}
-			</div>
-		</div>
-	);
-});
-
-const TitleStains = forwardRef((props, ref) => {
-	return (
-		<>
-			<img className="stain" src={fps3} style={{top: '0%', right: '-30%', opacity: 0.75, width: '70%', transform: 'rotate(110deg)',}}/>
-			<img className="stain" src={fps4} style={{bottom: '20%', right: '-40%', opacity: 0.75, width: '60%'}}/>
-			<img className="stain" src={fps3} style={{top: '30%', left: '-30%', opacity: 0.75, width: '70%'}}/>
-		</>
-	);
-});
-
-const TitlePage = forwardRef((props, ref) => {
+const TitlePage = forwardRef<HTMLDivElement, PageProps>((props, ref) => {
 	return (
 		<>
 			<img src={imgCover} width='100%' style={{top: 0, left: 0,}} height='auto' max-width='100%' max-height='100%' object-fit='contain'/>
-			<div className="title-page-cont">
+			<div className="title-page-cont" ref={ref}>
 				<div style={{width: '90%'}}>
 					We fix, maintain, and modify:
 					<br></br>
@@ -197,13 +187,14 @@ const TitlePage = forwardRef((props, ref) => {
 				<br></br>
 				karbonsclassics@gmail.com
 				</div>
+				{props.children}
 			</div>
 
 		</>
 	);
 });
 
-const CoverPage = forwardRef((props, ref) => {
+const CoverPage = forwardRef<HTMLDivElement, PageProps>((props, ref) => {
 	return (
 		<>
 		<div className="cover-page" ref={ref}>	
@@ -218,9 +209,9 @@ const CoverPage = forwardRef((props, ref) => {
 
 function App() {
 	function getBookSize() {
-		const newState = window.innerWidth < window.innerHeight/.90; // Figure out why this ratio works.
+		const newState: boolean = window.innerWidth < window.innerHeight/.90; // Figure out why this ratio works.
 		const scale=.9;
-		let newSize = window.innerHeight*scale;
+		let newSize: number = window.innerHeight*scale;
 		if (newState) {
 			if (window.innerWidth < newSize*.6) {
 				newSize=(window.innerWidth/.6)*scale;
@@ -228,15 +219,28 @@ function App() {
 		}
 		return [newState, newSize];
 	}
-	const [newState, newSize] = getBookSize();
-	const [usePortrait, setUsePortrait] = useState(newState);
-	const [bookSize, setBookSize] = useState(newSize);
-	const [fontBaseSize, setFontBaseSize] = useState(newSize/30);
-	const flipBookRef = useRef(null);
-	
-	const [testLoad, setTestLoad] = useState(null);
+	const [rawState, rawSize] = getBookSize();
+	const newState = typeof rawState === 'boolean' ? rawState : false;
+	const newSize = typeof rawSize === 'number' ? rawSize : 600;
+	//const [usePortrait, setUsePortrait] = useState<boolean>(newState);
+	//const [bookSize, setBookSize] = useState<number>(newSize);
+	const usePortrait: boolean = newState;
+	const bookSize: number = newSize;
+	const [fontBaseSize, setFontBaseSize] = useState<number>(newSize/30);
+	//const flipBookRef = useRef<InstanceType<typeof HTMLFlipBook>>(null);
+	const flipBookRef = useRef<any>(null); // Safe workaround
+	/*
+	 * import { PageFlip } from "page-flip";
+	 * const flipBookRef = useRef<{ pageFlip: () => PageFlip } | null>(null);
+	*/
 
-	function IndexEntry({ entryTitle, entryPages, entryFlip}) {
+	interface IndexEntryProps {
+		entryTitle: string;
+		entryPages: string;
+		entryFlip: string;
+	}
+	
+	function IndexEntry({ entryTitle, entryPages, entryFlip}: IndexEntryProps) {
 		return (
 			<div style={{
 				width: '100%',
@@ -247,7 +251,9 @@ function App() {
 					marginRight: '1%',
 				}}>
 				<a onClick={() => {
-					flipBookRef.current.pageFlip().flip(parseInt(entryFlip));
+					if (flipBookRef.current) {
+						flipBookRef.current.pageFlip().flip(parseInt(entryFlip));
+					}
 				}}>{entryTitle}</a>
 				</span>
 				<span style={{
@@ -265,45 +271,60 @@ function App() {
 	}
 
 	useEffect(() => {
-		const handleResize = () => {
+		/*const handleResize = () => {
 			const [newState, newSize] = getBookSize();
-			setBookSize(newSize);
-			setUsePortrait(newState);
+			//setBookSize(newSize);
+			//setUsePortrait(newState);
+			setBookSize(newSize as number);
+			setUsePortrait(newState as boolean);
 			//flipBookRef.current.update();
 			//flipBookRef.current.pageFlip().updateOrientation(usePortrait);
 			if (flipBookRef.current) {
 				flipBookRef.current.pageFlip().update();
 			}
 		};
-		window.addEventListener('resize', handleResize);
+		window.addEventListener('resize', handleResize);*/
 		const timer = setTimeout(() => {
 			if(flipBookRef.current) {
 				if (flipBookRef.current.pageFlip().getCurrentPageIndex() == 0) {
 					//flipBookRef.current.pageFlip().flipNext();
 					//document.getElementById('popupDiv').style.display = 'block';
-					document.getElementById('popupDiv').style.opacity = 1;
+					const popupDiv = document.getElementById('popupDiv');
+					if (popupDiv) {
+						popupDiv.style.opacity = '1';
+					}
+				} else {
+					setFontBaseSize(newSize/30)
 				}
 				//Perhaps have a pop up here, otherwise auto flip to next page:
 			}
 		}, 4500);
 		return () => {
 			clearTimeout(timer);
-			window.removeEventListener('resize',handleResize);
+			//window.removeEventListener('resize',handleResize);
 		};
 	}, []);
 	return (
 		<>
-		<img src={imgPencil} pointerEvents='none' style={{ position: 'absolute', top: '-15%', right: '30%', height: '40%', transform: 'rotate(95deg)'}}/>
+		<img className='pencil' src={imgPencil} style={{ position: 'absolute', top: '-15%', right: '30%', height: '40%', transform: 'rotate(95deg)'}}/>
 		<HTMLFlipBook
 		ref={flipBookRef}
+		className='flipbook-class'
+		startPage={0}
+		autoSize={true}
+		maxShadowOpacity={0.6}
+		showPageCorners={true}
 		width={bookSize*.6}
-		height={bookSize}
+		height={bookSize as number}
 		showCover={true}
 		usePortrait={usePortrait}
 		startZIndex={0}
 		drawShadow={true}
 		onFlip={() => { 
-			document.getElementById('popupDiv').style.opacity = 0;
+			const popup = document.getElementById('popupDiv');
+			if (popup) {
+				popup.style.opacity = '0';
+			}
 			//console.log(flipBookRef.current.pageFlip());
 		}}
 		style={{fontSize: fontBaseSize}}>

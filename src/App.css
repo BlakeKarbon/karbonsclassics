@@ -154,6 +154,9 @@ html {
 .page-container {
 	padding: 5%;
 }
+.pencil {
+	pointer-events: none;
+}
 .page h1 {
 	font-size: 200%;
 	font-family: "liberation-sans";
