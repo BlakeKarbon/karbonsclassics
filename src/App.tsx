@@ -9,6 +9,9 @@ import imgBack from './assets/imgs/back.png'
 import imgPencil from './assets/imgs/pencil.png'
 import tap from './assets/icons/tap-1-svgrepo-com.svg'
 import swipe from './assets/icons/swipe-left-svgrepo-com.svg'
+import tiktok from './assets/icons/icons8-tiktok.svg'
+import instagram from './assets/icons/icons8-instagram.svg'
+import facebook from './assets/icons/icons8-facebook.svg'
 
 // It looks like these end up loading dynamically...
 // Black and White Image Assets:
@@ -386,7 +389,17 @@ function App() {
 				Our passion is to keep your old equipment in use, whether that be taking friends on rides to a car show, hauling goods, or pulling a plow.
 				</p>
 				<h1>Social Media:</h1>
-				<div></div>
+				<div style={{textAlign: 'center', display: 'flex', justifyContent: 'space-around', alignItems: 'center'}}>
+					<div>
+					<a href="https://www.tiktok.com/@karbonsclassics"><span><img src={tiktok} style={{width: '4em', height: '4em'}}/></span></a>
+					<a href="https://www.tiktok.com/@karbonsclassics">TikTok</a></div>
+					<div>
+					<a href="https://www.instagram.com/karbonsclassicequipmentandauto/"><span><img src={instagram} style={{width: '4em', height: '4em'}}/></span></a>
+					<a href="https://www.instagram.com/karbonsclassicequipmentandauto/">Instagram</a></div>
+					<div>
+					<a href="https://www.facebook.com/profile.php?id=61576957358382"><span><img src={facebook} style={{width: '4em', height: '4em'}}/></span></a>
+					<a href="https://www.facebook.com/profile.php?id=61576957358382">Facebook</a></div>
+				</div>
 			</Page>
 			<Page number="3">
 				<h1>Gallery:</h1>
