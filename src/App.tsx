@@ -327,7 +327,19 @@ function App() {
 			}
 			//console.log(flipBookRef.current.pageFlip());
 		}}
-		style={{fontSize: fontBaseSize}}>
+		style={{fontSize: fontBaseSize}}
+		size="fixed"
+		minWidth={100}
+		maxWidth={10000}
+		minHeight={100}
+		maxHeight={10000}
+		flippingTime={1000}
+		mobileScrollSupport={true}
+		useMouseEvents={true}
+		swipeDistance={30}
+		disableFlipByClick={false}
+		clickEventForward={false}
+		>	
 			<CoverPage>
 				<div id='popupDiv' className='popup' style={{position: 'absolute', zIndex: 2,}}>
 					<div className='popup-text' style={{ position: 'relative', width: '70%', padding: '1rem'}}>
