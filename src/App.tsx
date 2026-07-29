@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef, forwardRef, ReactNode } from 'react'
+import { useState, useEffect, useRef, forwardRef, createContext, useContext, ReactNode, CSSProperties } from 'react'
 //import { useState, useLayoutEffect, useEffect, useRef, forwardRef, lazy  } from 'react'
 import './App.css'
 import HTMLFlipBook from 'react-pageflip'
@@ -158,6 +158,72 @@ import colorVidValvetrain from './assets/vids/color/valvetrain.webm'
 
 const cutoffYear = 1990;
 
+// How many pages away from the currently viewed page to keep media loaded for.
+// Keeps the current spread plus the next/previous spread ready before the user flips to them.
+const LOAD_RADIUS = 3;
+
+// Which page (by flip index) is currently on screen, updated from HTMLFlipBook's onFlip event.
+const CurrentPageContext = createContext<number>(0);
+// Which page (by flip index) a given piece of media lives on, set by Page/CoverPage.
+const PageIndexContext = createContext<number>(0);
+
+function useIsPageActive(): boolean {
+	const currentPage = useContext(CurrentPageContext);
+	const pageIndex = useContext(PageIndexContext);
+	return Math.abs(pageIndex - currentPage) <= LOAD_RADIUS;
+}
+
+interface LazyImageProps {
+	src: string;
+	width?: string | number;
+	height?: string | number;
+	style?: CSSProperties;
+}
+
+// Only mounts the <img> (so the browser only fetches it) once its page is near the current
+// one, and overlays a spinner on top until that page is active and the image has loaded.
+function LazyImage({ src, width, height, style }: LazyImageProps) {
+	const active = useIsPageActive();
+	const [loaded, setLoaded] = useState(false);
+	const showSpinner = !active || !loaded;
+	return (
+		<span className="lazy-media" style={{ width, height, ...style }}>
+			{active ? (
+				<img src={src} width={width} height={height} style={style} onLoad={() => setLoaded(true)}/>
+			) : (
+				<span className="lazy-media-placeholder"/>
+			)}
+			{showSpinner && <span className="media-spinner" aria-label="Loading"/>}
+		</span>
+	);
+}
+
+interface LazyVideoProps {
+	src: string;
+	style?: CSSProperties;
+}
+
+// Same idea as LazyImage: the <video>/<source> only mounts (and starts streaming) once its
+// page is near the current one, with a spinner overlaid until the first frame is ready.
+function LazyVideo({ src, style }: LazyVideoProps) {
+	const active = useIsPageActive();
+	const [loaded, setLoaded] = useState(false);
+	const showSpinner = !active || !loaded;
+	return (
+		<span className="lazy-media lazy-media-video" style={style}>
+			{active ? (
+				<video style={style} autoPlay loop muted playsInline onLoadedData={() => setLoaded(true)}>
+					<source src={src} type="video/webm"/>
+					Error Loading Video...
+				</video>
+			) : (
+				<span className="lazy-media-placeholder"/>
+			)}
+			{showSpinner && <span className="media-spinner" aria-label="Loading"/>}
+		</span>
+	);
+}
+
 interface PageProps {
   children?: ReactNode;
   number?: string;
@@ -167,7 +233,11 @@ const Page = forwardRef<HTMLDivElement, PageProps>((props, ref) => {
 	return (
 		<div className="page" ref={ref}>
 			<div className="page-container">
-				<div className="page-content">{props.children}</div>
+				<div className="page-content">
+					<PageIndexContext.Provider value={Number(props.number ?? 0)}>
+						{props.children}
+					</PageIndexContext.Provider>
+				</div>
 			</div>
 			<div className="page-footer">{props.number}</div>
 		</div>
@@ -198,12 +268,18 @@ const TitlePage = forwardRef<HTMLDivElement, PageProps>((props, ref) => {
 	);
 });
 
-const CoverPage = forwardRef<HTMLDivElement, PageProps>((props, ref) => {
+interface CoverPageProps extends PageProps {
+	pageIndex: number;
+}
+
+const CoverPage = forwardRef<HTMLDivElement, CoverPageProps>((props, ref) => {
 	return (
 		<>
-		<div className="cover-page" ref={ref}>	
+		<div className="cover-page" ref={ref}>
 			<div className="cover-page-filter"></div>
-			{props.children}	
+			<PageIndexContext.Provider value={props.pageIndex}>
+				{props.children}
+			</PageIndexContext.Provider>
 		</div>
 		</>
 	);
@@ -231,6 +307,7 @@ function App() {
 	const usePortrait: boolean = newState;
 	const bookSize: number = newSize;
 	const [fontBaseSize, setFontBaseSize] = useState<number>(newSize/30);
+	const [currentPage, setCurrentPage] = useState<number>(0);
 	//const flipBookRef = useRef<InstanceType<typeof HTMLFlipBook>>(null);
 	const flipBookRef = useRef<any>(null); // Safe workaround
 	/*
@@ -311,6 +388,7 @@ function App() {
 	return (
 		<>
 		<img className='pencil' src={imgPencil} style={{ position: 'absolute', top: '-15%', right: '30%', height: '40%', transform: 'rotate(95deg)'}}/>
+		<CurrentPageContext.Provider value={currentPage}>
 		<HTMLFlipBook
 		ref={flipBookRef}
 		className='flipbook-class'
@@ -324,11 +402,12 @@ function App() {
 		usePortrait={usePortrait}
 		startZIndex={0}
 		drawShadow={true}
-		onFlip={() => { 
+		onFlip={(e) => {
 			const popup = document.getElementById('popupDiv');
 			if (popup) {
 				popup.style.opacity = '0';
 			}
+			setCurrentPage(e.data);
 			//console.log(flipBookRef.current.pageFlip());
 		}}
 		style={{fontSize: fontBaseSize}}
@@ -344,7 +423,7 @@ function App() {
 		disableFlipByClick={false}
 		clickEventForward={false}
 		>	
-			<CoverPage>
+			<CoverPage pageIndex={0}>
 				<div id='popupDiv' className='popup' style={{position: 'absolute', zIndex: 2,}}>
 					<div className='popup-text' style={{ position: 'relative', width: '70%', padding: '1rem'}}>
 						Welcome to Karbon's Classic Equipment and Auto! Swipe or tap the sides to flip pages!
@@ -408,211 +487,173 @@ function App() {
 			<Page number="3">
 				<h1>Gallery:</h1>
 				<div>Wheel cylinder replacement on this 1963, factory 4x4, International Harvester, Loadstar 1600:</div>
-				<img src={bwImgLoadstar1} width='100%' height='auto' object-fit='contain'/>
-				<img src={bwImgLoadstarWorkers2} width='100%' height='auto' object-fit='contain'/>
+				<LazyImage src={bwImgLoadstar1} width='100%' height='auto'/>
+				<LazyImage src={bwImgLoadstarWorkers2} width='100%' height='auto'/>
 			</Page>
 			<Page number="4">
 				<div>1957 Napco Conversion Chevy Pickup spotted on a clients property:</div>
-				<img src={bwImgNapco4} width='100%' height='auto' object-fit='contain'/>
-				<img src={bwImgNapco3} width='100%' height='auto' object-fit='contain'/>
+				<LazyImage src={bwImgNapco4} width='100%' height='auto'/>
+				<LazyImage src={bwImgNapco3} width='100%' height='auto'/>
 				<div style={{position: 'absolute', textAlign: 'left', left: '42%'}}>Closeup of a locking hub.</div>
 				<div>
-					<img src={bwImgNapco2} width='40%' height='auto' object-fit='contain'/>
+					<LazyImage src={bwImgNapco2} width='40%' height='auto'/>
 				</div>
 			</Page>
 			<Page number="5">
 				<div>Dylan's 1967 4x4 Suburban:</div>
-				<img src={bwImgBurb1} width='100%' height='auto' object-fit='contain'/>
-				<img src={bwImgBurb2} width='100%' height='auto' object-fit='contain'/>
+				<LazyImage src={bwImgBurb1} width='100%' height='auto'/>
+				<LazyImage src={bwImgBurb2} width='100%' height='auto'/>
 				<div>Sullair air compressor water fountian:</div>
-				<video style={{maxWidth: '70%', maxHeight: '70%'}} autoPlay loop muted>
-					<source src={bwVidSullairFountian} type="video/webm"/>
-					Error Loading Video...
-				</video>
+				<LazyVideo src={bwVidSullairFountian} style={{maxWidth: '70%', maxHeight: '70%'}}/>
 			</Page>
 			<Page number="6">
 				<div>1959 Barn Door Willys Wagon:</div>
-				<img src={bwImgWillys} width='100%' height='auto' object-fit='contain'/>
-				<img src={bwImgWillysOpen} width='100%' height='auto' object-fit='contain'/>
+				<LazyImage src={bwImgWillys} width='100%' height='auto'/>
+				<LazyImage src={bwImgWillysOpen} width='100%' height='auto'/>
 			</Page>
 			<Page number="7">
 				<div>Valve adjustment on the flathead inline 6:</div>
-				<img src={bwImgWillysValves} width='100%' height='auto' object-fit='contain'/>
+				<LazyImage src={bwImgWillysValves} width='100%' height='auto'/>
 			</Page>
 			<Page number="8">
 				<div>Blake hand cranking the diesel 1965 Isuzu Elfin:</div>
-				<img src={bwImgIsuzuHandCrank} width='100%' height='auto' object-fit='contain'/>
+				<LazyImage src={bwImgIsuzuHandCrank} width='100%' height='auto'/>
 				<div>This is the only known left hand drive and english instrument isuzu elfin known to exist. It has a factory 4 cylinder C240 diesel engine and gets 23 mpg. Its rated as a 1.75 ton truck.</div>
 			</Page>
 			<Page number="9">
 				<div>Hauling a 1960s, 7.25 liter, 4 cylinder, H model cummins:</div>
-				<img src={bwImgIsuzuH4} width='100%' height='auto' object-fit='contain'/>
+				<LazyImage src={bwImgIsuzuH4} width='100%' height='auto'/>
 				<div>Fabricating brake reservoir:</div>
-				<video style={{maxWidth: '100%', maxHeight: '100%'}} autoPlay loop muted>
-					<source src={bwVidWelding} type="video/webm"/>
-					Error Loading Video...
-				</video>
+				<LazyVideo src={bwVidWelding} style={{maxWidth: '100%', maxHeight: '100%'}}/>
 			</Page>
 			<Page number="10">
 				<div>Blake's previously owned 1963 Dodge W200 Power Wagon ex forestry service truck:</div>
-				<img src={bwImgDodgeFlex} width='100%' height='auto' object-fit='contain'/>
+				<LazyImage src={bwImgDodgeFlex} width='100%' height='auto'/>
 				<div>Live valve adjustment:</div>
-				<video style={{maxWidth: '80%', maxHeight: '80%'}} autoPlay loop muted>
-					<source src={bwVidDodgeValves1} type="video/webm"/>
-					Error Loading Video...
-				</video>
+				<LazyVideo src={bwVidDodgeValves1} style={{maxWidth: '80%', maxHeight: '80%'}}/>
 			</Page>
 			<Page number="11">
-				<video style={{maxWidth: '100%', maxHeight: '100%'}} autoPlay loop muted>
-					<source src={bwVidDodgeValves2} type="video/webm"/>
-					Error Loading Video...
-				</video>
+				<LazyVideo src={bwVidDodgeValves2} style={{maxWidth: '100%', maxHeight: '100%'}}/>
 				<div>Water crossing: (Used as intended)</div>
-				<img src={bwImgDodgeWater} width='100%' height='auto' object-fit='contain'/>
+				<LazyImage src={bwImgDodgeWater} width='100%' height='auto'/>
 			</Page>
 			<Page number="12">
 				<div>Wax rope rear main seal / oil pan gasket replacement:</div>
-				<video style={{maxWidth: '80%', maxHeight: '80%'}} autoPlay loop muted>
-					<source src={bwVidDodgeRearMain} type="video/webm"/>
-					Error Loading Video...
-				</video>
+				<LazyVideo src={bwVidDodgeRearMain} style={{maxWidth: '80%', maxHeight: '80%'}}/>
 			</Page>
 			<Page number="13">
 				<div>1960's Ford grain truck:</div>
-				<img src={bwImgGrainFord} width='100%' height='auto' object-fit='contain'/>
+				<LazyImage src={bwImgGrainFord} width='100%' height='auto'/>
 				<div>Bent pushrod replacement and live valve adjustment:</div>
 				<div>
 				<span>
-				<video style={{maxWidth: '33%', maxHeight: '33%'}} autoPlay loop muted>
-					<source src={bwVidGrainFordValves1} type="video/webm"/>
-					Error Loading Video...
-				</video>
+				<LazyVideo src={bwVidGrainFordValves1} style={{maxWidth: '33%', maxHeight: '33%'}}/>
 				</span>
 				<span>
-				<video style={{maxWidth: '33%', maxHeight: '33%'}} autoPlay loop muted>
-					<source src={bwVidGrainFordCovers} type="video/webm"/>
-					Error Loading Video...
-				</video>
+				<LazyVideo src={bwVidGrainFordCovers} style={{maxWidth: '33%', maxHeight: '33%'}}/>
 				</span>
 				<span>
-				<video style={{maxWidth: '33%', maxHeight: '33%'}} autoPlay loop muted>
-					<source src={bwVidGrainFordRockerRemoval} type="video/webm"/>
-					Error Loading Video...
-				</video>
+				<LazyVideo src={bwVidGrainFordRockerRemoval} style={{maxWidth: '33%', maxHeight: '33%'}}/>
 				</span>
 				</div>
 			</Page>
 			<Page number="14">
 				<div>Blake's 1959 International Harvester Travelall:</div>
-				<img src={bwImgTravelallFlex} width='100%' height='auto' object-fit='contain'/>
+				<LazyImage src={bwImgTravelallFlex} width='100%' height='auto'/>
 				<div>Often used as a great service truck:</div>
-				<img src={bwImgWorkTravelall2} width='100%' height='auto' object-fit='contain'/>
+				<LazyImage src={bwImgWorkTravelall2} width='100%' height='auto'/>
 			</Page>
 			<Page number="15">
 				<div>Underside driveline shot:</div>
-				<video style={{maxWidth: '90%', maxHeight: '90%'}} autoPlay loop muted>
-					<source src={bwVidTravelallUnderside} type="video/webm"/>
-					Error Loading Video...
-				</video>
+				<LazyVideo src={bwVidTravelallUnderside} style={{maxWidth: '90%', maxHeight: '90%'}}/>
 			</Page>
 			<Page number="16">
 				<div>Carburator vacuum diag:</div>
-				<video style={{maxWidth: '100%', maxHeight: '100%'}} autoPlay loop muted>
-					<source src={bwVidTravelallVac} type="video/webm"/>
-					Error Loading Video...
-				</video>
+				<LazyVideo src={bwVidTravelallVac} style={{maxWidth: '100%', maxHeight: '100%'}}/>
 			</Page>
 			<Page number="17">
 				<div>Being used to revive a 1963 International Harvester R210D:</div>
-				<img src={bwImgPlowAndTravelall2} width='100%' height='auto' object-fit='contain'/>
-				<img src={bwImgPlowAndTravelall} width='80%' height='auto' object-fit='contain'/>
+				<LazyImage src={bwImgPlowAndTravelall2} width='100%' height='auto'/>
+				<LazyImage src={bwImgPlowAndTravelall} width='80%' height='auto'/>
 			</Page>
 			<Page number="18">
 				<div>Swapping split ring rims:</div>
-				<img src={bwImgPlow1} width='100%' height='auto' object-fit='contain'/>
-				<img src={bwImgPlow2} width='70%' height='auto' object-fit='contain'/>
+				<LazyImage src={bwImgPlow1} width='100%' height='auto'/>
+				<LazyImage src={bwImgPlow2} width='70%' height='auto'/>
 			</Page>
 			<Page number="19">
 				<div>Working on the factory 11 liter H6 cummons:</div>
-				<img src={bwImgPlow3} width='100%' height='auto' object-fit='contain'/>
+				<LazyImage src={bwImgPlow3} width='100%' height='auto'/>
 				<div>Internal shot from rebuilding the injection pump:</div>
-				<img src={bwImgPtPump1} width='70%' height='auto' object-fit='contain'/>
+				<LazyImage src={bwImgPtPump1} width='70%' height='auto'/>
 			</Page>
 			<Page number="20">
 				<div>Using the Isuzu as a service truck for the plow:</div>
-				<img src={bwImgIsuzuPlow1} width='100%' height='auto' object-fit='contain'/>
+				<LazyImage src={bwImgIsuzuPlow1} width='100%' height='auto'/>
 				<div>Rocker arm assembly on a 1980s Allis Chalmers tractor.</div>
-				<video style={{maxWidth: '55%', maxHeight: '55%'}} autoPlay loop muted>
-					<source src={bwVidValvetrain} type="video/webm"/>
-					Error Loading Video...
-				</video>
+				<LazyVideo src={bwVidValvetrain} style={{maxWidth: '55%', maxHeight: '55%'}}/>
 			</Page>
 			<Page number="21">
 				<div>1962 Studebaker medium duty with factory 4-53 Detroit Diesel:</div>
-				<img src={bwImgStudebaker} width='100%' height='auto' object-fit='contain'/>
+				<LazyImage src={bwImgStudebaker} width='100%' height='auto'/>
 				<div>4-53 Detroit engine:</div>
 				<span>
-				<img src={bwImgStudebaker4_714} width='50%' height='auto' object-fit='contain'/>
-				<img src={bwImgStudebaker4_713} width='50%' height='auto' object-fit='contain'/>
+				<LazyImage src={bwImgStudebaker4_714} width='50%' height='auto'/>
+				<LazyImage src={bwImgStudebaker4_713} width='50%' height='auto'/>
 				</span>
 			</Page>
 			<Page number="22">
 				<div>Governor surging diagnosis and repair:</div>
-				<img src={bwImgStudebaker4_711} width='100%' height='auto' object-fit='contain'/>
+				<LazyImage src={bwImgStudebaker4_711} width='100%' height='auto'/>
 			</Page>
 			<Page number="23">
 				<div>Blake's B120 Pickup next to the Studebaker:</div>
-				<img src={bwImgB120WithStudebaker} width='100%' height='auto' object-fit='contain'/>
+				<LazyImage src={bwImgB120WithStudebaker} width='100%' height='auto'/>
 			</Page>
 			<Page number="24">
 				<div>Blake's 1960 International Harvester B120 Pickup:</div>
-				<img src={bwImgB120Woods} width='100%' height='auto' object-fit='contain'/>
-				<img src={bwImgB120WaterCrossing} width='100%' height='auto' object-fit='contain'/>
+				<LazyImage src={bwImgB120Woods} width='100%' height='auto'/>
+				<LazyImage src={bwImgB120WaterCrossing} width='100%' height='auto'/>
 			</Page>
 			<Page number="25">
 				<div>Clutch inspection:</div>
-				<video style={{maxWidth: '90%', maxHeight: '90%'}} autoPlay loop muted>
-					<source src={bwVidClutch} type="video/webm"/>
-					Error Loading Video...
-				</video>
+				<LazyVideo src={bwVidClutch} style={{maxWidth: '90%', maxHeight: '90%'}}/>
 			</Page>
 			<Page number="26">
 				<div>1953 Chevy truck hydromatic rebuild:</div>
-				<img src={bwImgHydromatic1} width='90%' height='auto' object-fit='contain'/>
-				<img src={bwImgHydromatic2} width='90%' height='auto' object-fit='contain'/>
+				<LazyImage src={bwImgHydromatic1} width='90%' height='auto'/>
+				<LazyImage src={bwImgHydromatic2} width='90%' height='auto'/>
 			</Page>
 			<Page number="27">
 				<div>Bands:</div>
-				<img src={bwImgHydromatic3} width='100%' height='auto' object-fit='contain'/>
+				<LazyImage src={bwImgHydromatic3} width='100%' height='auto'/>
 			</Page>
 			<Page number="28">
 				<div>Planetary set:</div>
-				<img src={bwImgHydromatic4} width='80%' height='auto' object-fit='contain'/>
+				<LazyImage src={bwImgHydromatic4} width='80%' height='auto'/>
 			</Page>
 			<Page number="29">
 				<div>Hydraulic control circuitry:</div>
-				<img src={bwImgHydromatic5} width='100%' height='auto' object-fit='contain'/>
+				<LazyImage src={bwImgHydromatic5} width='100%' height='auto'/>
 				<div>Torque converter internal:</div>
-				<img src={bwImgHydromatic6} width='80%' height='auto' object-fit='contain'/>
+				<LazyImage src={bwImgHydromatic6} width='80%' height='auto'/>
 			</Page>
 			<Page number="30">
 				<div>Split camshaft pulled from a John Deere 6466:</div>
-				<img src={bwImgSplitCam} width='90%' height='auto' object-fit='contain'/>
+				<LazyImage src={bwImgSplitCam} width='90%' height='auto'/>
 			</Page>
 			<Page number="31">
 				<div>Preignition damage on a John Deere 6466:</div>
-				<video style={{maxWidth: '80%', maxHeight: '80%'}} autoPlay loop muted>
-					<source src={bwVidBlownPiston} type="video/webm"/>
-					Error Loading Video...
-				</video>
+				<LazyVideo src={bwVidBlownPiston} style={{maxWidth: '80%', maxHeight: '80%'}}/>
 			</Page>
 			<Page number="32">
-				<img src={bwImgComingBack} width='100%' height='auto' object-fit='contain'/>
+				<LazyImage src={bwImgComingBack} width='100%' height='auto'/>
 			</Page>
-			<CoverPage>
+			<CoverPage pageIndex={33}>
 				<img src={imgBack} width='100%' style={{bottom: 0, left: 0,}} height='auto' max-width='100%' max-height='100%' object-fit='contain'/>
 			</CoverPage>
 		</HTMLFlipBook>
+		</CurrentPageContext.Provider>
 		</>
 	);
 }
