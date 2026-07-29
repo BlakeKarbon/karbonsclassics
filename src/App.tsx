@@ -12,6 +12,7 @@ import swipe from './assets/icons/swipe-left-svgrepo-com.svg'
 import tiktok from './assets/icons/icons8-tiktok.svg'
 import instagram from './assets/icons/icons8-instagram.svg'
 import facebook from './assets/icons/icons8-facebook.svg'
+import youtube from './assets/icons/icons8-youtube.svg'
 
 // It looks like these end up loading dynamically...
 // Black and White Image Assets:
@@ -399,6 +400,9 @@ function App() {
 					<div>
 					<a href="https://www.facebook.com/profile.php?id=61576957358382"><span><img src={facebook} style={{width: '4em', height: '4em'}}/></span></a>
 					<a href="https://www.facebook.com/profile.php?id=61576957358382">Facebook</a></div>
+					<div>
+					<a href="https://www.youtube.com/@KarbonsClassics"><span><img src={youtube} style={{width: '4em', height: '4em'}}/></span></a>
+					<a href="https://www.youtube.com/@KarbonsClassics">YouTube</a></div>
 				</div>
 			</Page>
 			<Page number="3">
@@ -544,9 +548,9 @@ function App() {
 				</video>
 			</Page>
 			<Page number="21">
-				<div>1962 Studebaker medium duty with factory 4-71 Detroit Diesel:</div>
+				<div>1962 Studebaker medium duty with factory 4-53 Detroit Diesel:</div>
 				<img src={bwImgStudebaker} width='100%' height='auto' object-fit='contain'/>
-				<div>4-71 Detroit engine:</div>
+				<div>4-53 Detroit engine:</div>
 				<span>
 				<img src={bwImgStudebaker4_714} width='50%' height='auto' object-fit='contain'/>
 				<img src={bwImgStudebaker4_713} width='50%' height='auto' object-fit='contain'/>
