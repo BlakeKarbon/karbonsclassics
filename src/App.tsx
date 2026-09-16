@@ -257,7 +257,7 @@ const TitlePage = forwardRef<HTMLDivElement, PageProps>((props, ref) => {
 					</div>
 				</div>
 				<div className="title-contact">
-				(720)-404-0695
+				(###)-###-####
 				<br></br>
 				karbonsclassics@gmail.com
 				</div>
